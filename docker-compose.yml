@@ -11,7 +11,8 @@ secrets:
           
 services:
   canvas-db:
-    image: postgres:9.6
+    image: 192.87.106.18:56001/postgres:0.1
+#    image: postgres:9.6
     volumes:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/data:/var/lib/postgresql/data
     secrets:
@@ -35,8 +36,7 @@ services:
     ports:
       - "8901:8025"
   app: &app
-    image: docker-canvas
-    build: .
+    image: 192.87.106.18:56001/canvas:0.1
     command: bash -c "./wait-for-it.sh -t 40 db:5432 && /usr/src/entrypoint"
     environment:
       - DB_DRIVER=postgresql
@@ -66,6 +66,10 @@ services:
       - ./deploy/development-local.rb:/usr/src/app/config/environments/development-local.rb:ro
       - ./wait-for-it.sh:/usr/src/app/wait-for-it.sh:ro
       - ./.data/tmp:/usr/src/app/tmp
+    secrets:
+      - canvas_db_dba_password
+    networks:
+      - dev-net
     ports:
       - "8900:80"
     depends_on:
