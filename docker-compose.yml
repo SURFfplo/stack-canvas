@@ -1,0 +1,79 @@
+version: '3.7'
+
+networks: 
+  dev-net:
+    external: true
+
+secrets:
+  canvas_db_dba_password:
+    external: true
+          
+          
+services:
+  canvas-db:
+    image: postgres:9.6
+    volumes:
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/data:/var/lib/postgresql/data
+    secrets:
+      - canvas_db_dba_password
+    networks:
+      - dev-net
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_DB:       canvas
+      POSTGRES_USER:     canvas
+      POSTGRES_DB_PASSWORD_FILE: /run/secrets/canvas_db_dba_password
+
+  redis:
+    image: redis:3.2.4
+    command: redis-server --appendonly yes
+    volumes:
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/redis:/data
+  mail:
+    image: mailhog/mailhog:v1.0.0
+    ports:
+      - "8901:8025"
+  app: &app
+    image: docker-canvas
+    build: .
+    command: bash -c "./wait-for-it.sh -t 40 db:5432 && /usr/src/entrypoint"
+    environment:
+      - DB_DRIVER=postgresql
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_USERNAME=canvas
+      - DB_PASSWORD_FILE= /run/secrets/canvas_db_dba_password
+      - DB_NAME=canvas
+      - RAILS_ENV=production
+      - REDIS_SERVER=redis://redis:6379
+      - MAIL_SERVER=mail
+      - MAIL_PORT=1025
+      - MAIL_USERNAME=canvas
+      - MAIL_PASSWORD=canvas
+      - MAIL_DOMAIN=example.com
+      - MAIL_DEFAULT_SENDER_ADDRESS=canvas@example.com
+      - MAIL_DEFAULT_SENDER_NAME=Canvas Admin
+    volumes:
+      - ./.data/public/dist/brandable_css:/usr/src/app/public/dist/brandable_css
+      - ./deploy/database.yml:/usr/src/app/config/database.yml:ro
+      - ./deploy/redis.yml:/usr/src/app/config/redis.yml:ro
+      - ./deploy/cache.yml:/usr/src/app/config/cache.yml:ro
+      - ./deploy/outgoing_mail.yml:/usr/src/app/config/outgoing_mail.yml:ro
+      - ./deploy/security.yml:/usr/src/app/config/security.yml:ro
+      - ./deploy/delayed_jobs.yml:/usr/src/app/config/delayed_jobs.yml:ro
+      - ./deploy/domain.yml:/usr/src/app/config/domain.yml:ro
+      - ./deploy/development-local.rb:/usr/src/app/config/environments/development-local.rb:ro
+      - ./wait-for-it.sh:/usr/src/app/wait-for-it.sh:ro
+      - ./.data/tmp:/usr/src/app/tmp
+    ports:
+      - "8900:80"
+    depends_on:
+      - db
+      - redis
+      - mail
+  worker:
+    <<: *app
+    command: bundle exec script/delayed_job run
+    ports:
+      - "8902:80"
