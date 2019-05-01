@@ -33,6 +33,10 @@ services:
       restart_policy:
         condition: none    
     environment:
+      - CANVAS_LMS_ADMIN_EMAIL=ronald.ham@surfnet.nl
+      - CANVAS_LMS_ADMIN_PASSWORD=canvasPASS
+      - CANVAS_LMS_STATS_COLLECTION=opt_out
+      - CANVAS_LMS_ACCOUNT_NAME-SURFnetDLO
       - DB_DRIVER=postgresql
       - DB_HOST=db
       - DB_PORT=15432
