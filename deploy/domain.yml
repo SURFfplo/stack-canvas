@@ -1,0 +1,11 @@
+default: &default
+  domain: localhost:8900
+
+development:
+  <<: *default
+
+production:
+  <<: *default
+
+test:
+  <<: *default
