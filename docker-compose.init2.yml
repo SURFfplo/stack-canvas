@@ -1,0 +1,83 @@
+version: '3.7'
+
+networks: 
+  dev-net:
+    external: true
+
+secrets:
+  canvas_db_dba_password:
+    external: true
+   
+services:
+  canvas-db:
+    image: 192.87.106.18:56001/postgres:0.1
+
+    volumes:
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/data:/var/lib/postgresql/data
+    secrets:
+      - canvas_db_dba_password
+    networks:
+      - dev-net
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_DB:       canvas
+      POSTGRES_USER:     canvas
+      POSTGRES_DB_PASSWORD_FILE: /run/secrets/canvas_db_dba_password
+
+  app: 
+    image: 192.87.106.18:56001/canvas:0.1
+    command: bash -c "./wait-for-it.sh -t 40 db:5432 && /usr/src/entrypoint  && bundle exec rake canvas:compile_assets_dev brand_configs:generate_and_upload_all
+"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: none    
+    environment:
+      - CANVAS_LMS_ADMIN_EMAIL=ronald.ham@surfnet.nl
+      - CANVAS_LMS_ADMIN_PASSWORD=canvasPASS
+      - CANVAS_LMS_STATS_COLLECTION=opt_out
+      - CANVAS_LMS_ACCOUNT_NAME-SURFnetDLO
+      - DB_DRIVER=postgresql
+      - DB_HOST=db
+      - DB_PORT=15432
+      - DB_USERNAME=canvas
+      - DB_PASSWORD_FILE= /run/secrets/canvas_db_dba_password
+      - DB_NAME=canvas
+      - RAILS_ENV=production
+      - REDIS_SERVER=redis://redis:6379
+      - MAIL_SERVER=mail
+      - MAIL_PORT=1025
+      - MAIL_USERNAME=canvas
+      - MAIL_PASSWORD=canvas
+      - MAIL_DOMAIN=example.com
+      - MAIL_DEFAULT_SENDER_ADDRESS=canvas@example.com
+      - MAIL_DEFAULT_SENDER_NAME=Canvas Admin
+    volumes:
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/brandable_css:/usr/src/app/public/dist/brandable_css
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/tmp:/usr/src/app/tmp
+    secrets:
+      - canvas_db_dba_password
+    configs:
+      - source: canvas_cache
+        target: /usr/src/app/config/cache.yml
+      - source: canvas_database
+        target: /usr/src/app/config/database.yml      
+      - source: delayed_jobs
+        target: /usr/src/app/config/delayed_jobs.yml
+      - source: canvas_dev_loc
+        target: /usr/src/app/config/development-local.rb
+      - source: canvas_domain
+        target: /usr/src/app/config/domain.yml
+      - source: canvas_outgoing_mail
+        target: /usr/src/app/config/outgoing_mail.yml
+      - source: canvas_redis
+        target: /usr/src/app/config/redis.yml     
+       - source: canvas_security
+        target: /usr/src/app/config/security.yml  
+    networks:
+      - dev-net
+    ports:
+      - "8900:80"
+    depends_on:
+      - db
