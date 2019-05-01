@@ -21,9 +21,10 @@ docker config create canvas_redis deploy/redis.yml
 docker config create canvas_security deploy/security.yml
 
 
-docker stack deploy -c docker-compose.yml $STACK_SERVICE
+docker stack deploy --compose-file docker-compose.init.yml $STACK_SERVICE
 
-# to do remover services taht we will not use for initial  
+# to do remover services taht we will not use for initial
+# docker stack deploy --compose-file docker-compose.yml -c docker-compose.prod.yml $STACK_SERVICE
 # docker service rm $STACK_SERVICE_konga 
 #"woit for 30 seconds for kong-db container to fully come up" 
 sleep 30
