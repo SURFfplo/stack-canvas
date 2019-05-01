@@ -35,13 +35,44 @@ services:
     image: mailhog/mailhog:v1.0.0
     ports:
       - "8901:8025"
+version: '3.7'
+
+networks: 
+  dev-net:
+    external: true
+
+secrets:
+  canvas_db_dba_password:
+    external: true
+   
+services:
+  canvas-db:
+    image: 192.87.106.18:56001/postgres:0.1
+
+    volumes:
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/data:/var/lib/postgresql/data
+    secrets:
+      - canvas_db_dba_password
+    networks:
+      - dev-net
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_DB:       canvas
+      POSTGRES_USER:     canvas
+      POSTGRES_DB_PASSWORD_FILE: /run/secrets/canvas_db_dba_password
+
   app: &app
     image: 192.87.106.18:56001/canvas:0.1
     command: bash -c "./wait-for-it.sh -t 40 db:5432 && /usr/src/entrypoint"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: none    
     environment:
       - DB_DRIVER=postgresql
       - DB_HOST=db
-      - DB_PORT=5432
+      - DB_PORT=15432
       - DB_USERNAME=canvas
       - DB_PASSWORD_FILE= /run/secrets/canvas_db_dba_password
       - DB_NAME=canvas
@@ -55,17 +86,27 @@ services:
       - MAIL_DEFAULT_SENDER_ADDRESS=canvas@example.com
       - MAIL_DEFAULT_SENDER_NAME=Canvas Admin
     volumes:
-      - ./.data/public/dist/brandable_css:/usr/src/app/public/dist/brandable_css
-      - ./deploy/database.yml:/usr/src/app/config/database.yml:ro
-      - ./deploy/redis.yml:/usr/src/app/config/redis.yml:ro
-      - ./deploy/cache.yml:/usr/src/app/config/cache.yml:ro
-      - ./deploy/outgoing_mail.yml:/usr/src/app/config/outgoing_mail.yml:ro
-      - ./deploy/security.yml:/usr/src/app/config/security.yml:ro
-      - ./deploy/delayed_jobs.yml:/usr/src/app/config/delayed_jobs.yml:ro
-      - ./deploy/domain.yml:/usr/src/app/config/domain.yml:ro
-      - ./deploy/development-local.rb:/usr/src/app/config/environments/development-local.rb:ro
-      - ./wait-for-it.sh:/usr/src/app/wait-for-it.sh:ro
-      - ./.data/tmp:/usr/src/app/tmp
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/brandable_css:/usr/src/app/public/dist/brandable_css
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/tmp:/usr/src/app/tmp
+    secrets:
+      - canvas_db_dba_password
+    configs:
+      - source: canvas_cache
+        target: /usr/src/app/config/cache.yml
+      - source: canvas_database
+        target: /usr/src/app/config/database.yml      
+      - source: delayed_jobs
+        target: /usr/src/app/config/delayed_jobs.yml
+      - source: canvas_dev_loc
+        target: /usr/src/app/config/development-local.rb
+      - source: canvas_domain
+        target: /usr/src/app/config/domain.yml
+      - source: canvas_outgoing_mail
+        target: /usr/src/app/config/outgoing_mail.yml
+      - source: canvas_redis
+        target: /usr/src/app/config/redis.yml     
+       - source: canvas_security
+        target: /usr/src/app/config/security.yml  
     secrets:
       - canvas_db_dba_password
     networks:
