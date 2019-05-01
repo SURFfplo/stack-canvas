@@ -22,13 +22,16 @@ docker config create canvas_redis deploy/redis.yml
 docker config create canvas_security deploy/security.yml
 
 
+#create two rune once services
 docker stack deploy --compose-file docker-compose.init.yml $STACK_SERVICE
 
+docker stack deploy --compose-file docker-compose.init2.yml $STACK_SERVICE
+
+# alternative sollutions
 # to do remover services taht we will not use for initial
 # docker stack deploy --compose-file docker-compose.yml -c docker-compose.prod.yml $STACK_SERVICE
 # docker service rm $STACK_SERVICE_konga 
 #"woit for 30 seconds for kong-db container to fully come up" 
-sleep 30
 
 # Initialize kong container
 #temp_service < docker service create --restart-condition=none --detach=true --secret kong_db_dba_password --name kong-temp1 --env KONG_DATABASE=postgres --env KONG_PG_HOST=kong-db --env KONG_PG_PORT=5432 --env KONG_PG_DATABASE=api-gw --env KONG_PG_DB_PASSWORD_FILE=/run/secrets/kong_db_dba_password --network appnet kong-oidc kong migrations bootstrap
