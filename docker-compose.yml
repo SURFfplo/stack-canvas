@@ -38,7 +38,7 @@ services:
     networks:
       - dev-net
     ports:
-      - "15432:5432"
+      - "57113:5432"
     environment:
       POSTGRES_DB:       canvas
       POSTGRES_USER:     canvas
@@ -54,23 +54,6 @@ services:
     ports:
       - "8901:8025"
    
-services:
-  canvas-db:
-    image: 192.87.106.18:56001/postgres:0.1
-
-    volumes:
-      - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/data:/var/lib/postgresql/data
-    secrets:
-      - canvas_db_dba_password
-    networks:
-      - dev-net
-    ports:
-      - "15432:5432"
-    environment:
-      POSTGRES_DB:       canvas
-      POSTGRES_USER:     canvas
-      POSTGRES_DB_PASSWORD_FILE: /run/secrets/canvas_db_dba_password
-
   app: &app
     image: 192.87.106.18:56001/canvas:0.1
     command: bash -c "./wait-for-it.sh -t 40 db:5432 && /usr/src/entrypoint"
@@ -81,7 +64,7 @@ services:
     environment:
       - DB_DRIVER=postgresql
       - DB_HOST=db
-      - DB_PORT=15432
+      - DB_PORT=57113
       - DB_USERNAME=canvas
       - DB_PASSWORD_FILE= /run/secrets/canvas_db_dba_password
       - DB_NAME=canvas
@@ -121,7 +104,7 @@ services:
     networks:
       - dev-net
     ports:
-      - "8900:80"
+      - "57111:80"
     depends_on:
       - db
       - redis
@@ -130,4 +113,4 @@ services:
     <<: *app
     command: bundle exec script/delayed_job run
     ports:
-      - "8902:80"
+      - "57112:80"
