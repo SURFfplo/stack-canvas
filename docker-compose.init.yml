@@ -7,7 +7,26 @@ networks:
 secrets:
   canvas_db_dba_password:
     external: true
-   
+
+configs:
+  canvas_cache:
+    external: true
+  canvas_database:
+    external: true
+  delayed_jobs:
+    external: true
+  canvas_dev_loc:
+    external: true
+  canvas_domain:
+    external: true
+  canvas_outgoing_mail:
+    external: true
+  canvas_redis:
+    external: true
+  canvas_security:
+    external: true
+
+
 services:
   canvas-db:
     image: 192.87.106.18:56001/postgres:0.1
