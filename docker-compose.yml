@@ -105,7 +105,7 @@ services:
         target: /usr/src/app/config/outgoing_mail.yml
       - source: canvas_redis
         target: /usr/src/app/config/redis.yml     
-       - source: canvas_security
+      - source: canvas_security
         target: /usr/src/app/config/security.yml  
     secrets:
       - canvas_db_dba_password
