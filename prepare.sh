@@ -24,9 +24,9 @@ docker config create canvas_security deploy/security.yml
 
 #create two rune once services
 docker stack deploy --compose-file docker-compose.init.yml $STACK_SERVICE
-
+sleep 300
 docker stack deploy --compose-file docker-compose.init2.yml $STACK_SERVICE
-
+sleep 300
 # alternative sollutions
 # to do remover services taht we will not use for initial
 # docker stack deploy --compose-file docker-compose.yml -c docker-compose.prod.yml $STACK_SERVICE
