@@ -27,8 +27,7 @@ services:
 
   app: 
     image: 192.87.106.18:56001/canvas:0.1
-    command: bash -c "./wait-for-it.sh -t 40 db:5432 && /usr/src/entrypoint  && bundle exec rake canvas:compile_assets_dev brand_configs:generate_and_upload_all
-"
+    command: bash -c "./wait-for-it.sh -t 40 db:5432 && /usr/src/entrypoint  && bundle exec rake canvas:compile_assets_dev brand_configs:generate_and_upload_all"
     deploy:
       replicas: 1
       restart_policy:
