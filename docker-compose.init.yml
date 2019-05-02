@@ -38,7 +38,7 @@ services:
     networks:
       - dev-net
     ports:
-      - "15432:5432"
+      - "57113:5432"
     environment:
       POSTGRES_DB:       canvas
       POSTGRES_USER:     canvas
@@ -58,7 +58,7 @@ services:
       - CANVAS_LMS_ACCOUNT_NAME-SURFnetDLO
       - DB_DRIVER=postgresql
       - DB_HOST=db
-      - DB_PORT=15432
+      - DB_PORT=57113
       - DB_USERNAME=canvas
       - DB_PASSWORD_FILE= /run/secrets/canvas_db_dba_password
       - DB_NAME=canvas
@@ -96,6 +96,6 @@ services:
     networks:
       - dev-net
     ports:
-      - "8900:80"
+      - "57111:80"
     depends_on:
       - db
