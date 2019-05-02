@@ -13,7 +13,7 @@ configs:
     external: true
   canvas_database:
     external: true
-  delayed_jobs:
+  canvas_delayed_jobs:
     external: true
   canvas_dev_loc:
     external: true
@@ -104,7 +104,7 @@ services:
         target: /usr/src/app/config/cache.yml
       - source: canvas_database
         target: /usr/src/app/config/database.yml      
-      - source: delayed_jobs
+      - source: canvas_delayed_jobs
         target: /usr/src/app/config/delayed_jobs.yml
       - source: canvas_dev_loc
         target: /usr/src/app/config/development-local.rb
