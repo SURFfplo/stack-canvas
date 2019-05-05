@@ -25,7 +25,8 @@ configs:
     external: true
   canvas_security:
     external: true
-
+  canvas_wait:
+    external: true
 
 services:
   canvas-db:
@@ -56,15 +57,15 @@ services:
    
   app: &app
     image: 192.87.106.18:56001/canvas:0.1
-    command: bash -c "./wait-for-it.sh -t 40 db:5432 && /usr/src/entrypoint"
+    command: bash -c "./wait-for-it.sh -t 40 canvas-db:5432 && /usr/src/entrypoint"
     deploy:
       replicas: 1
       restart_policy:
-        condition: none    
+        condition: always    
     environment:
       - DB_DRIVER=postgresql
-      - DB_HOST=db
-      - DB_PORT=57113
+      - DB_HOST=canvas-db
+      - DB_PORT=5432
       - DB_USERNAME=canvas
       - DB_PASSWORD_FILE= /run/secrets/canvas_db_dba_password
       - DB_NAME=canvas
@@ -98,7 +99,10 @@ services:
       - source: canvas_redis
         target: /usr/src/app/config/redis.yml     
       - source: canvas_security
-        target: /usr/src/app/config/security.yml  
+        target: /usr/src/app/config/security.yml
+      - source: canvas_wait
+        target: /usr/src/app/wait-for-it.sh  
+        mode: 0755
     secrets:
       - canvas_db_dba_password
     networks:
