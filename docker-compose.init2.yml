@@ -25,6 +25,8 @@ configs:
     external: true
   canvas_security:
     external: true
+  canvas_wait:
+    external: true
 
 services:
   canvas-db:
@@ -45,7 +47,7 @@ services:
 
   app: 
     image: 192.87.106.18:56001/canvas:0.1
-    command: bash -c "./wait-for-it.sh -t 40 db:5432 && /usr/src/entrypoint  && bundle exec rake canvas:compile_assets_dev brand_configs:generate_and_upload_all"
+    command: bash -c "./wait-for-it.sh -t 40 canvas-db:5432 && bundle exec rake canvas:compile_assets_dev brand_configs:generate_and_upload_all"
     deploy:
       replicas: 1
       restart_policy:
@@ -54,10 +56,10 @@ services:
       - CANVAS_LMS_ADMIN_EMAIL=ronald.ham@surfnet.nl
       - CANVAS_LMS_ADMIN_PASSWORD=canvasPASS
       - CANVAS_LMS_STATS_COLLECTION=opt_out
-      - CANVAS_LMS_ACCOUNT_NAME-SURFnetDLO
+      - CANVAS_LMS_ACCOUNT_NAME=SURFnetDLO
       - DB_DRIVER=postgresql
-      - DB_HOST=db
-      - DB_PORT=57113
+      - DB_HOST=canvas-db
+      - DB_PORT=5432
       - DB_USERNAME=canvas
       - DB_PASSWORD_FILE= /run/secrets/canvas_db_dba_password
       - DB_NAME=canvas
@@ -91,10 +93,13 @@ services:
       - source: canvas_redis
         target: /usr/src/app/config/redis.yml     
       - source: canvas_security
-        target: /usr/src/app/config/security.yml  
+        target: /usr/src/app/config/security.yml
+      - source: canvas_wait
+        target: /usr/src/app/wait-for-it.sh  
+        mode: 0755        
     networks:
       - dev-net
     ports:
       - "57111:80"
     depends_on:
-      - db
+      - canvas-db
