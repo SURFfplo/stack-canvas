@@ -9,7 +9,9 @@ mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE-$STACK_VERSION/brandable_
 
 # create secrets for database
 # alternative date |md5sum|awk '{print $1}' | docker secret create my_secret -
-cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1 | docker secret create canvas_db_dba_password -
+#cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1 | docker secret create canvas_db_dba_password -
+printf "canvasPASS"  | docker secret create canvas_db_dba_password -
+
 
 # create configs for canvas
 docker config create canvas_cache deploy/cache.yml
@@ -20,13 +22,15 @@ docker config create canvas_domain deploy/domain.yml
 docker config create canvas_outgoing_mail deploy/outgoing_mail.yml
 docker config create canvas_redis deploy/redis.yml
 docker config create canvas_security deploy/security.yml
+docker config create canvas_wait wait-for-it.sh
 
 
-#create two rune once services
+
+#create two run once services for initialisation purposes
 docker stack deploy --compose-file docker-compose.init.yml $STACK_SERVICE
-sleep 300
+sleep 100
 docker stack deploy --compose-file docker-compose.init2.yml $STACK_SERVICE
-sleep 300
+sleep 100
 # alternative sollutions
 # to do remover services taht we will not use for initial
 # docker stack deploy --compose-file docker-compose.yml -c docker-compose.prod.yml $STACK_SERVICE
