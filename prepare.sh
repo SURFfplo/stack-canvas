@@ -8,9 +8,10 @@ mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE-$STACK_VERSION/brandable_
 
 
 # create secrets for database
-# alternative date |md5sum|awk '{print $1}' | docker secret create my_secret -
-#cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1 | docker secret create canvas_db_dba_password -
-printf "canvasPASS"  | docker secret create canvas_db_dba_password -
+# e.g. date |md5sum|awk '{print $1}' | docker secret create my_secret -
+# or cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1 | docker secret create canvas_db_dba_password -
+# or visible printf "pasword"  | docker secret create canvas_db_dba_password -
+date |md5sum|awk '{print $1}' | docker secret canvas_db_dba_password -
 
 
 # create configs for canvas
