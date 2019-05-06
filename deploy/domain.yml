@@ -1,5 +1,5 @@
 default: &default
-  domain: localhost:8900
+  domain: 192.87.106.21:57111
 
 development:
   <<: *default
