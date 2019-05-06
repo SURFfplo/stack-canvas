@@ -32,7 +32,6 @@ configs:
 services:
   canvas-db:
     image: 192.87.106.18:56001/postgres:0.1
-
     volumes:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/data:/var/lib/postgresql/data
     secrets:
@@ -51,8 +50,8 @@ services:
     command: bash -c "./wait-for-it.sh -t 40 canvas-db:5432 && bundle exec rake db:create db:initial_setup"
     deploy:
       replicas: 1
-      restart_policy:
-        condition: none    
+#      restart_policy:
+#        condition: none    
     environment:
       - CANVAS_LMS_ADMIN_EMAIL=ronald.ham@surfnet.nl
       - CANVAS_LMS_ADMIN_PASSWORD=canvasPASS
