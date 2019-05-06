@@ -11,7 +11,7 @@ mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE-$STACK_VERSION/brandable_
 # e.g. date |md5sum|awk '{print $1}' | docker secret create my_secret -
 # or cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1 | docker secret create canvas_db_dba_password -
 # or visible printf "pasword"  | docker secret create canvas_db_dba_password -
-date |md5sum|awk '{print $1}' | docker secret canvas_db_dba_password -
+date |md5sum|awk '{print $1}' | docker secret create canvas_db_dba_password -
 
 
 # create configs for canvas
