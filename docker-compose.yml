@@ -53,7 +53,7 @@ services:
   mail:
     image: mailhog/mailhog:v1.0.0
     ports:
-      - "8901:8025"
+      - "57114:8025"
    
   app: &app
     image: 192.87.106.18:56001/canvas:0.1
@@ -73,7 +73,7 @@ services:
       - DB_PASSWORD_FILE= /run/secrets/canvas_db_dba_password
       - DB_NAME=canvas
       - RAILS_ENV=production
-      - REDIS_SERVER=redis://redis:6379
+      - REDIS_SERVER=canvas-redis://redis:6379
       - MAIL_SERVER=mail
       - MAIL_PORT=1025
       - MAIL_USERNAME=canvas
