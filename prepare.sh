@@ -29,9 +29,9 @@ docker config create canvas_wait wait-for-it.sh
 
 #create two run once services for initialisation purposes
 docker stack deploy --compose-file docker-compose.init.yml $STACK_SERVICE
-sleep 100
+sleep 200
 docker stack deploy --compose-file docker-compose.init2.yml $STACK_SERVICE
-sleep 100
+sleep 200
 # alternative sollutions
 # to do remover services taht we will not use for initial
 # docker stack deploy --compose-file docker-compose.yml -c docker-compose.prod.yml $STACK_SERVICE
