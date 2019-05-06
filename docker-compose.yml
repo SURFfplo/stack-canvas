@@ -61,7 +61,10 @@ services:
     deploy:
       replicas: 1
       restart_policy:
-        condition: always    
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 200s      
     environment:
       - DB_DRIVER=postgresql
       - DB_HOST=canvas-db
@@ -103,8 +106,6 @@ services:
       - source: canvas_wait
         target: /usr/src/app/wait-for-it.sh  
         mode: 0755
-    secrets:
-      - canvas_db_dba_password
     networks:
       - dev-net
     ports:
