@@ -8,16 +8,16 @@ mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE-$STACK_VERSION/brandable_
 mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE-$STACK_VERSION/tmp
 
 
+# remove any old secrest and configs
+docker config rm $(docker config ls -f name=canvas -q)
+docker secret rm $(docker secret ls -f name=canvas -q)
+
 # create secrets for database
 # e.g. date |md5sum|awk '{print $1}' | docker secret create my_secret -
 # or cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1 | docker secret create canvas_db_dba_password -
 # or visible printf "pasword"  | docker secret create canvas_db_dba_password -
 date |md5sum|awk '{print $1}' | docker secret create canvas_db_dba_password -
 
-
-# remove any old secrest and configs
-docker config rm $(docker config ls -f name=canvas -q)
-docker secret rm $(docker secret ls -f name=canvas -q)
 # create configs for canvas
 docker config create canvas_cache deploy/cache.yml
 docker config create canvas_database deploy/database.yml
