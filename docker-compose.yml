@@ -50,11 +50,15 @@ services:
     command: redis-server --appendonly yes
     volumes:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/redis:/data
+    networks:
+      - dev-net
   mail:
     image: mailhog/mailhog:v1.0.0
     ports:
       - "57114:8025"
-   
+    networks:
+      - dev-net
+  
   app: &app
     image: 192.87.106.18:56001/canvas:0.1
     command: bash -c "./wait-for-it.sh -t 40 canvas-db:5432 && /usr/src/entrypoint"
