@@ -73,7 +73,7 @@ services:
       - DB_PASSWORD_FILE= /run/secrets/canvas_db_dba_password
       - DB_NAME=canvas
       - RAILS_ENV=production
-      - REDIS_SERVER=canvas-redis://redis:6379
+      - REDIS_SERVER=redis://canvas-redis:6379
       - MAIL_SERVER=mail
       - MAIL_PORT=1025
       - MAIL_USERNAME=canvas
