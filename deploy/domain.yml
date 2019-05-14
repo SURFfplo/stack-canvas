@@ -1,5 +1,5 @@
 default: &default
-  domain: 192.87.106.21:57111
+  domain: lms.dlo.surfnet.nl
 
 development:
   <<: *default
