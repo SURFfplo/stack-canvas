@@ -1,7 +1,11 @@
 version: '3.7'
 
-networks: 
+networks:
   dev-net:
+    external: true
+  test-net:
+    external: true
+  exp-net:
     external: true
 
 secrets:
@@ -31,15 +35,12 @@ configs:
 services:
   canvas-db:
     image: 192.87.106.18:56001/postgres:0.1
-#    image: postgres:9.6
     volumes:
-      - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/data:/var/lib/postgresql/data
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/data:/var/lib/postgresql/data
     secrets:
       - canvas_db_dba_password
     networks:
-      - dev-net
-    ports:
-      - "57113:5432"
+      - $STACK_NETWORK
     environment:
       POSTGRES_DB:       canvas
       POSTGRES_USER:     canvas
@@ -49,15 +50,9 @@ services:
     image: redis:3.2.4
     command: redis-server --appendonly yes
     volumes:
-      - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/redis:/data
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/redis:/data
     networks:
-      - dev-net
-  mail:
-    image: mailhog/mailhog:v1.0.0
-    ports:
-      - "57114:8025"
-    networks:
-      - dev-net
+      - $STACK_NETWORK
   
   app: &app
     image: 192.87.106.18:56001/canvas:0.1
@@ -70,6 +65,7 @@ services:
         max_attempts: 3
         window: 200s      
     environment:
+      - CANVAS_DOMAIN=$STACK_DOMAIN
       - DB_DRIVER=postgresql
       - DB_HOST=canvas-db
       - DB_PORT=5432
@@ -86,8 +82,8 @@ services:
       - MAIL_DEFAULT_SENDER_ADDRESS=canvas@example.com
       - MAIL_DEFAULT_SENDER_NAME=Canvas Admin
     volumes:
-      - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/brandable_css:/usr/src/app/public/dist/brandable_css
-      - /mnt/nfs/nfsdlo/$STACK_NETWORK/canvas-0.1/tmp:/usr/src/app/tmp
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/brandable_css:/usr/src/app/public/dist/brandable_css
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/tmp:/usr/src/app/tmp
     secrets:
       - canvas_db_dba_password
     configs:
@@ -111,13 +107,12 @@ services:
         target: /usr/src/app/wait-for-it.sh  
         mode: 0755
     networks:
-      - dev-net
+      - $STACK_NETWORK
     ports:
-      - "57111:80"
+      - $STACK_PORT:80
     depends_on:
       - canvas-db
       - redis
-      - mail
   worker:
     <<: *app
     command: bundle exec script/delayed_job run
