@@ -33,6 +33,8 @@ configs:
     external: true
   canvas_wait:
     external: true
+  canvas_api:
+    external: true  
 
 services:
   canvas-db:
