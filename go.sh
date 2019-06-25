@@ -18,12 +18,16 @@ fi
 if [ "$4" != "" ]; then
         PORT=$4
 fi
+if [ "$5" != "" ]; then
+        PASSWORD=$5
+fi
 
 # reuse input
 export STACK_SERVICE=$SERVICE
 export STACK_VERSION=$VERSION
 export STACK_NETWORK=$NETWORK
 export STACK_PORT=$PORT
+export STACK_PASSWORD=$PASSWORD
 
 if [ $NETWORK == "dev-net" ]; then
         export STACK_DOMAIN=lms.dev.dlo.surf.nl

@@ -16,7 +16,8 @@ sleep 10
 
 # remove any old secrest and configs
 docker config rm $(docker config ls -f name=canvas -q)
-docker secret rm $(docker secret ls -f name=canvas -q)
+# do not rmove secrets automaticially otherwhise api eys need to be reconfigured over all systems
+#docker secret rm $(docker secret ls -f name=canvas -q)
 
 # create secrets for database
 # e.g. date |md5sum|awk '{print $1}' | docker secret create my_secret -
@@ -44,5 +45,8 @@ docker stack deploy --compose-file docker-compose.init.yml $STACK_SERVICE
 sleep 200
 docker stack deploy --compose-file docker-compose.init2.yml $STACK_SERVICE
 sleep 200
+#remove passowrd from system after initial setup
+export STACK_PASSWORD=""
 docker stack deploy --compose-file docker-compose.init3.yml $STACK_SERVICE
 sleep 200
+
