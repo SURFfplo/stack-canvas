@@ -1,5 +1,5 @@
 default: &default
-  domain: lms.dlo.surfnet.nl
+  domain: <%= ENV['CANVAS_DOMAIN'] %>
 
 development:
   <<: *default
