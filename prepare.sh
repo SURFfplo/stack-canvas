@@ -47,6 +47,6 @@ docker stack deploy --compose-file docker-compose.init2.yml $STACK_SERVICE
 sleep 200
 #remove passowrd from system after initial setup
 export STACK_PASSWORD=""
-docker stack deploy --compose-file docker-compose.init3.yml $STACK_SERVICE
+#docker stack deploy --compose-file docker-compose.init3.yml $STACK_SERVICE
 sleep 200
 
