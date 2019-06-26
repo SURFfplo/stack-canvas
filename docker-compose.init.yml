@@ -43,8 +43,6 @@ services:
       - canvas_db_dba_password
     networks:
       - $STACK_NETWORK
-    ports:
-      - "57113:5432"
     environment:
       POSTGRES_DB:       canvas
       POSTGRES_USER:     canvas
