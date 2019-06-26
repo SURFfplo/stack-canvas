@@ -11,9 +11,8 @@ networks:
 secrets:
   canvas_db_dba_password:
     external: true
-  canvas_secret:
-    external: true
-    
+
+
 configs:
   canvas_cache:
     external: true
@@ -89,6 +88,7 @@ services:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/tmp:/usr/src/app/tmp
     secrets:
       - canvas_db_dba_password
+      - canvas_secret
     configs:
       - source: canvas_cache
         target: /usr/src/app/config/cache.yml
