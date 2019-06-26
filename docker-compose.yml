@@ -72,7 +72,6 @@ services:
       - DB_PORT=5432
       - DB_USERNAME=canvas
       - DB_PASSWORD_FILE= /run/secrets/canvas_db_dba_password
-      - CANVAS_SECRET_FILE= /run/secrets/canvas_secret
       - DB_NAME=canvas
       - RAILS_ENV=production
       - REDIS_SERVER=redis://canvas-redis:6379
@@ -88,7 +87,6 @@ services:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/tmp:/usr/src/app/tmp
     secrets:
       - canvas_db_dba_password
-      - canvas_secret
     configs:
       - source: canvas_cache
         target: /usr/src/app/config/cache.yml
