@@ -41,12 +41,12 @@ docker config create canvas_api startup.sh
 
 
 #create two run once services for initialisation purposes
-docker stack deploy --compose-file docker-compose.init.yml $STACK_SERVICE
+docker stack deploy --with-registry-auth --compose-file docker-compose.init.yml $STACK_SERVICE
 sleep 200
-docker stack deploy --compose-file docker-compose.init2.yml $STACK_SERVICE
+docker stack deploy --with-registry-auth --compose-file docker-compose.init2.yml $STACK_SERVICE
 sleep 200
 #remove passowrd from system after initial setup
 export STACK_PASSWORD=""
-#docker stack deploy --compose-file docker-compose.init3.yml $STACK_SERVICE
+docker stack deploy --with-registry-auth --compose-file docker-compose.init3.yml $STACK_SERVICE
 sleep 200
 
