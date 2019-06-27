@@ -103,5 +103,4 @@ services:
       - $STACK_NETWORK
     ports:
       - $STACK_PORT:80
-    depends_on:
-      - canvas-db
+
