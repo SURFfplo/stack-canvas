@@ -7,7 +7,7 @@
 #DB_NAME=canvas
 #CANVAS_SECRET_FILE= /var/run/secrets/canvas_secret
 
-if [ "${!CANVAS_SECRET_FILE:-}" ]; then
+if [[ -v CANVAS_SECRET_FILE ]]; then
         key='$(< "${!CANVAS_SECRET_FILE}")'
         devkey=echo -n "docker-canvas" | openssl sha1 -hmac $key
         echo $devkey >&2
