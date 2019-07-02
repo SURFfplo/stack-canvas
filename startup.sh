@@ -8,7 +8,7 @@
 #CANVAS_SECRET_FILE= /var/run/secrets/canvas_secret
 
 if [[ -v CANVAS_SECRET_FILE ]]; then
-        key='$(< "${CANVAS_SECRET_FILE}")'
+        key='$(cat "${CANVAS_SECRET_FILE}")'
         devkey=echo -n "docker-canvas" | openssl sha1 -hmac $key
         echo $devkey >&2
 else 
