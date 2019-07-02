@@ -9,7 +9,9 @@
 
 if [[ -v CANVAS_SECRET_FILE ]]; then
         key=$(cat ${CANVAS_SECRET_FILE})
-        devkey=$(echo -n "docker-canvas" | openssl sha1 -hmac $key)
+        echo $key >&2
+        output=$(echo -n "docker-canvas" | openssl sha1 -hmac $key)
+        devkey=${output#*= }
         echo $devkey >&2
 else 
 	devkey='123'
