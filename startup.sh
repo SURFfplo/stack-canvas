@@ -10,8 +10,10 @@
 if [ "${!CANVAS_SECRET_FILE:-}" ]; then
         key='$(< "${!CANVAS_SECRET_FILE}")'
         devkey=echo -n "docker-canvas" | openssl sha1 -hmac $key
+        echo $devkey >&2
 else 
 	devkey='123'
+        echo $devkey >&2
 fi
 
 #key='$(< "${!CANVAS_SECRET_FILE}")'
