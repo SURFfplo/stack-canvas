@@ -114,3 +114,4 @@ services:
     <<: *app
     command: bundle exec script/delayed_job run
     ports:
+      - $STACK_PORT2:80
