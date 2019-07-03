@@ -76,7 +76,7 @@ services:
       - DB_NAME=canvas
       - RAILS_ENV=production
       - REDIS_SERVER=redis://canvas-redis:6379
-      - MAIL_SERVER=outgoing.mf.surf.nl
+      - MAIL_SERVER=outgoing.mf.surf.net
       - MAIL_PORT=25
       - MAIL_DOMAIN=surf.nl
       - MAIL_DEFAULT_SENDER_ADDRESS=no-reply@surf.nl
