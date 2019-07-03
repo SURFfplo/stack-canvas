@@ -113,3 +113,4 @@ services:
   worker:
     <<: *app
     command: bundle exec script/delayed_job run
+    ports:
