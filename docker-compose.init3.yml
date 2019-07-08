@@ -11,7 +11,7 @@ networks:
 secrets:
   canvas_db_dba_password:
     external: true
-  canvas_secret:
+  canvas_secret_api:
     external: true
 
 configs:
@@ -68,7 +68,7 @@ services:
       - DB_PORT=5432
       - DB_USERNAME=canvas
       - DB_PASSWORD_FILE= /run/secrets/canvas_db_dba_password
-      - CANVAS_SECRET_FILE= /run/secrets/canvas_secret
+      - CANVAS_SECRET_API_FILE= /run/secrets/canvas_secret_api
       - DB_NAME=canvas
       - RAILS_ENV=production
       - REDIS_SERVER=redis://redis:6379
