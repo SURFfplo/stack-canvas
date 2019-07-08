@@ -7,7 +7,7 @@
 #DB_NAME=canvas
 #CANVAS_SECRET_FILE= /var/run/secrets/canvas_secret
 
-if [[ -v CANVAS_SECRET_FILE ]]; then
+if [[ -v CANVAS_SECRET_API_FILE ]]; then
         api_key=$(cat ${CANVAS_SECRET_API_FILE})
         echo $key >&2
 else 
