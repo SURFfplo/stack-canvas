@@ -54,4 +54,4 @@ psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "update developer_key_account_bi
 #https://github.com/instructure/canvas-lms/blob/88fae607ae7c386912992062990a6c405d6d76ab/lib/canvas/security.rb
 #https://github.com/instructure/canvas-lms/blob/a664cdb0b26bf9d4473c0204dba38fc73a34ece7/lib/canvas/security/services_jwt.rb
 
-
+./create_login.sh

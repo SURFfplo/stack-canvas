@@ -12,27 +12,6 @@ secrets:
   canvas_db_dba_password:
     external: true
 
-
-configs:
-  canvas_cache:
-    external: true
-  canvas_database:
-    external: true
-  canvas_delayed_jobs:
-    external: true
-  canvas_dev_loc:
-    external: true
-  canvas_domain:
-    external: true
-  canvas_outgoing_mail:
-    external: true
-  canvas_redis:
-    external: true
-  canvas_security:
-    external: true
-  canvas_wait:
-    external: true
-
 services:
   canvas-db:
     image: 192.87.106.18:56001/postgres:0.1
@@ -57,7 +36,7 @@ services:
   
   app: &app
     image: 192.87.106.18:56001/canvas:0.1
-    command: bash -c "./wait-for-it.sh -t 40 canvas-db:5432 && /usr/src/entrypoint"
+    command: bash -c "./config/wait-for-it.sh -t 40 canvas-db:5432 && /usr/src/entrypoint"
     hostname: $STACK_DOMAIN
     deploy:
       replicas: 1
@@ -84,28 +63,9 @@ services:
     volumes:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/brandable_css:/usr/src/app/public/dist/brandable_css
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/tmp:/usr/src/app/tmp
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/configs:/usr/src/app/config
     secrets:
       - canvas_db_dba_password
-    configs:
-      - source: canvas_cache
-        target: /usr/src/app/config/cache.yml
-      - source: canvas_database
-        target: /usr/src/app/config/database.yml      
-      - source: canvas_delayed_jobs
-        target: /usr/src/app/config/delayed_jobs.yml
-      - source: canvas_dev_loc
-        target: /usr/src/app/config/development-local.rb
-      - source: canvas_domain
-        target: /usr/src/app/config/domain.yml
-      - source: canvas_outgoing_mail
-        target: /usr/src/app/config/outgoing_mail.yml
-      - source: canvas_redis
-        target: /usr/src/app/config/redis.yml     
-      - source: canvas_security
-        target: /usr/src/app/config/security.yml
-      - source: canvas_wait
-        target: /usr/src/app/wait-for-it.sh  
-        mode: 0755
     networks:
       - $STACK_NETWORK
     ports:
