@@ -23,7 +23,7 @@ secret=$(grep -A1 'production:' ./config/security.yml | tail -n1); secret=${secr
 #psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "delete from developer_key_account_bindings;"
 
 
-api_key=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
+#api_key=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 developer_api_key=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 
 #api_key='$(< "${!CANVAS_SECRET_FILE}")'
