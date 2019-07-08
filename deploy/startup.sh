@@ -18,9 +18,9 @@ fi
 
 secret=$(grep -A1 'production:' ./config/security.yml | tail -n1); secret=${secret//*encryption_key: /}; echo "$secret"
 
-psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "delete from developer_keys;"
-psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "delete from access_tokens;"
-psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "delete from developer_key_account_bindings;"
+#psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "delete from developer_keys;"
+#psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "delete from access_tokens;"
+#psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "delete from developer_key_account_bindings;"
 
 
 api_key=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
@@ -54,4 +54,4 @@ psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "update developer_key_account_bi
 #https://github.com/instructure/canvas-lms/blob/88fae607ae7c386912992062990a6c405d6d76ab/lib/canvas/security.rb
 #https://github.com/instructure/canvas-lms/blob/a664cdb0b26bf9d4473c0204dba38fc73a34ece7/lib/canvas/security/services_jwt.rb
 
-./create_login.sh
+./config/create_login.sh
