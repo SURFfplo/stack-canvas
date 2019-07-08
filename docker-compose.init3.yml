@@ -61,7 +61,7 @@ services:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/configs:/usr/src/app/config
     secrets:
       - canvas_db_dba_password
-      - canvas_secret
+      - canvas_secret_api
     networks:
       - $STACK_NETWORK
     ports:
