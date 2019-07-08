@@ -1,13 +1,14 @@
 #!/bin/bash
 
-# clean mounts
-rm -rf /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf
-rm -rf /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/data
-rm -rf /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/redis
-rm -rf /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/brandable_css
-rm -rf /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/tmp
-rm -rf /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/configs
+#first clean old stack if it exists
+match=$( docker stack ls | grep -i "$STACK_SERVICE")
+if [ "$match" ]; then
+    docker stack rm $STACK_SERVICE
+fi
+sleep 10
 
+# clean mounts
+sudo rm -rf /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION
 
 # create nfs mount
 mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf
@@ -17,12 +18,6 @@ mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/brandable_
 mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/tmp
 mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/configs
 
-#first clean old stack if it exists
-match=$( docker stack ls | grep -i "$STACK_SERVICE")
-if [ "$match" ]; then
-    docker stack rm $STACK_SERVICE
-fi
-sleep 10
 
 
 # Add config files and exexcutables to setup canvas
