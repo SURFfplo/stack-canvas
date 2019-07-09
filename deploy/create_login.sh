@@ -26,4 +26,4 @@ curl "$URL" \
      -F 'login_attribute=mail'
      -F 'sig_alg=RSA-SHA256' \
      -F 'certificate_fingerprint=d9:bd:30:11:e7:1d:12:fa:92:e9:3f:95:d6:c4:24:b5:cd:d3:6f:af' \
-     -H 'Authorization: Bearer $api_key'
+     -H "Authorization: Bearer $api_key"
