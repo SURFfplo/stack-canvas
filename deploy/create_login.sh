@@ -13,8 +13,11 @@ else
         echo $api_key >&2
 fi
 
+#URL="https://"${CANVAS_DOMAIN}"/api/v1/accounts/1/authentication_providers"
+URL="http://localhost/api/v1/accounts/1/authentication_providers"
+
 # Create SAML config
-curl 'https://$CANVAS_DOMAIN/api/v1/accounts/1/authentication_providers' \
+curl "$URL" \
      -F 'auth_type=saml' \
      -F 'idp_entity_id=https://idp.dev.dlo.surf.nl/saml2/idp/metadata.php' \
      -F 'log_in_url=https://idp.dev.dlo.surf.nl/saml2/idp/SSOService.php' \

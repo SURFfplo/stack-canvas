@@ -49,6 +49,7 @@ services:
         window: 200s      
     environment:
       - CANVAS_DOMAIN=$STACK_DOMAIN
+      - CANVAS_SECRET_API_FILE= /run/secrets/canvas_secret_api
       - DB_DRIVER=postgresql
       - DB_HOST=canvas-db
       - DB_PORT=5432
