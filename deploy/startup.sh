@@ -57,6 +57,6 @@ psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "update developer_key_account_bi
 
 /usr/src/entrypoint &
 
-sleep 200
+sleep 150
 
 ./config/create_login.sh
