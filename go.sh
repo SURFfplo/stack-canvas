@@ -1,7 +1,7 @@
 #!/bin/bash
 
 NETWORK=dev-net
-SERVICE=canvas
+SERVICE=DEVcanvas
 VERSION=0.1
 PORT=57111
 
