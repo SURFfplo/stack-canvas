@@ -57,7 +57,8 @@ psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "update developer_key_account_bi
 
 nohup /usr/src/entrypoint &>/dev/null &
 
-while [[ "$JSON_OUTPUT" =~ ^{.* ]]
+JSON_OUTPUT="empty"
+while [[ ! "$JSON_OUTPUT" =~ ^\{.* ]]
 do
     JSON_OUTPUT=$(./config/create_login.sh)
     echo $JSON_OUTPUT

@@ -17,7 +17,7 @@ fi
 URL="http://localhost/api/v1/accounts/1/authentication_providers"
 
 # Create SAML config
-curl "$URL" \
+curl -s "$URL" \
      -F 'auth_type=saml' \
      -F 'position=1' \
      -F 'idp_entity_id=https://idp.dev.dlo.surf.nl/saml2/idp/metadata.php' \
