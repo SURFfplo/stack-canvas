@@ -28,37 +28,28 @@ services:
       POSTGRES_USER:     canvas
       POSTGRES_DB_PASSWORD_FILE: /run/secrets/canvas_db_dba_password
 
-  canvas-redis:
-    image: redis:3.2.4
-    command: redis-server --appendonly yes
-    volumes:
-      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/redis:/data
-    networks:
-      - $STACK_NETWORK
-  
   app: &app
     image: 192.87.106.18:56001/canvas:0.1
     command: bash -c "./config/wait-for-it.sh -t 40 canvas-db:5432 && ./config/startup.sh"
-    hostname: $STACK_DOMAIN
     deploy:
       replicas: 1
       restart_policy:
-        condition: on-failure
-        delay: 30s
-        max_attempts: 3
-        window: 200s      
+        condition: none    
     environment:
+      - CANVAS_LMS_ADMIN_EMAIL=ronald.ham@surfnet.nl
+      - CANVAS_LMS_ADMIN_PASSWORD=$STACK_PASSWORD
+      - CANVAS_LMS_STATS_COLLECTION=opt_out
+      - CANVAS_LMS_ACCOUNT_NAME=SURFnetDLO
       - CANVAS_DOMAIN=$STACK_DOMAIN
-      - CANVAS_SECRET_API_FILE= /run/secrets/canvas_secret_api
       - DB_DRIVER=postgresql
       - DB_HOST=canvas-db
       - DB_PORT=5432
       - DB_USERNAME=canvas
       - DB_PASSWORD_FILE= /run/secrets/canvas_db_dba_password
+      - CANVAS_SECRET_API_FILE= /run/secrets/canvas_secret_api
       - DB_NAME=canvas
       - RAILS_ENV=production
-      - REDIS_SERVER=redis://canvas-redis:6379
-      - MAIL_SERVER=outgoing.mf.surf.net
+      - MAIL_SERVER=outgoing.mf.surf.nl
       - MAIL_PORT=25
       - MAIL_DOMAIN=surf.nl
       - MAIL_DEFAULT_SENDER_ADDRESS=no-reply@surf.nl
