@@ -28,7 +28,7 @@ services:
       POSTGRES_USER:     canvas
       POSTGRES_DB_PASSWORD_FILE: /run/secrets/canvas_db_dba_password
 
-  app: 
+  app: &app
     image: 192.87.106.18:56001/canvas:0.1
     command: bash -c "./config/wait-for-it.sh -t 40 canvas-db:5432 && ./config/startup.sh"
     deploy:
@@ -77,3 +77,8 @@ services:
     ports:
       - $STACK_PORT:80
 
+  worker:
+    <<: *app
+    command: bundle exec script/delayed_job run
+    ports:
+      - $STACK_PORT2:80
