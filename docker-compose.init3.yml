@@ -49,7 +49,6 @@ services:
       - CANVAS_SECRET_API_FILE= /run/secrets/canvas_secret_api
       - DB_NAME=canvas
       - RAILS_ENV=production
-      - REDIS_SERVER=redis://redis:6379
       - MAIL_SERVER=outgoing.mf.surf.nl
       - MAIL_PORT=25
       - MAIL_DOMAIN=surf.nl
