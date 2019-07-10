@@ -57,6 +57,9 @@ psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "update developer_key_account_bi
 
 nohup /usr/src/entrypoint &>/dev/null &
 
+mkdir /usr/src/app/tmp/files
+chown docker:docker /usr/src/app/tmp/files
+
 JSON_OUTPUT="empty"
 while [[ ! "$JSON_OUTPUT" =~ ^\{.* ]]
 do
