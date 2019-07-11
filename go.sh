@@ -32,12 +32,18 @@ export STACK_PASSWORD=$PASSWORD
 
 if [ $NETWORK == "dev-net" ]; then
         export STACK_DOMAIN=lms.dev.dlo.surf.nl
+        export STACK_NETWORK_URL_IDP=https://idp.dev.dlo.surf.nl
+        export STACK_NETWORK_IDP_FINGERPRINT=D9:BD:30:11:E7:1D:12:FA:92:E9:3F:95:D6:C4:24:B5:CD:D3:6F:AF
 fi
 if [ $NETWORK == "test-net" ]; then
         export STACK_DOMAIN=lms.test.dlo.surf.nl
+        export STACK_NETWORK_URL_IDP=https://idp.test.dlo.surf.nl
+        export STACK_NETWORK_IDP_FINGERPRINT=54:14:99:9B:9F:91:BE:DE:BA:0E:00:87:4A:88:35:49:68:F9:D9:82
 fi
 if [ $NETWORK == "exp-net" ]; then
         export STACK_DOMAIN=lms.experimenteer.dlo.surf.nl
+        export STACK_NETWORK_URL_IDP=https://idp.experimenteer.dlo.surf.nl
+        export STACK_NETWORK_IDP_FINGERPRINT=D5:42:1D:BB:9F:CE:2F:2E:F7:B5:06:A1:D3:DA:A9:48:D9:3F:21:0B
 fi
 
 # delete previous version
