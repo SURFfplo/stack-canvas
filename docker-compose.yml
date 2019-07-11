@@ -50,6 +50,8 @@ services:
     environment:
       - CANVAS_DOMAIN=$STACK_DOMAIN
       - CANVAS_SECRET_API_FILE= /run/secrets/canvas_secret_api
+      - STACK_NETWORK_URL_IDP=$STACK_NETWORK_URL_IDP
+      - STACK_NETWORK_IDP_FINGERPRINT=$STACK_NETWORK_IDP_FINGERPRINT
       - DB_DRIVER=postgresql
       - DB_HOST=canvas-db
       - DB_PORT=5432
