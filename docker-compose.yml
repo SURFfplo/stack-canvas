@@ -48,8 +48,8 @@ services:
         max_attempts: 3
         window: 200s      
     environment:
-      - STACK_NETWORK_URL_IDP: $STACK_NETWORK_URL_IDP
-      - STACK_NETWORK_IDP_FINGERPRINT: $STACK_NETWORK_IDP_FINGERPRINT
+      - IDP_URL=$STACK_NETWORK_URL_IDP
+      - IDP_FINGERPRINT=$STACK_NETWORK_IDP_FINGERPRINT
       - CANVAS_DOMAIN=$STACK_DOMAIN
       - CANVAS_SECRET_API_FILE= /run/secrets/canvas_secret_api
       - DB_DRIVER=postgresql
