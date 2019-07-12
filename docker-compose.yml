@@ -28,14 +28,7 @@ services:
       POSTGRES_USER:     canvas
       POSTGRES_DB_PASSWORD_FILE: /run/secrets/canvas_db_dba_password
 
-  canvas-redis:
-    image: 192.87.106.18:56001/redis:0.1
-    command: redis-server --appendonly yes
-    volumes:
-      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/redis:/data
-    networks:
-      - $STACK_NETWORK
-  
+
   app: &app
     image: 192.87.106.18:56001/canvas:0.1
     command: bash -c "./config/wait-for-it.sh -t 40 canvas-db:5432 && /usr/src/entrypoint"
@@ -59,7 +52,6 @@ services:
       - DB_PASSWORD_FILE= /run/secrets/canvas_db_dba_password
       - DB_NAME=canvas
       - RAILS_ENV=production
-      - REDIS_SERVER=redis://canvas-redis:6379
       - MAIL_SERVER=outgoing.mf.surf.net
       - MAIL_PORT=25
       - MAIL_DOMAIN=surf.nl
@@ -75,7 +67,6 @@ services:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/development-local.rb:/usr/src/app/config/development-local.rb
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/domain.yml:/usr/src/app/config/domain.yml
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/outgoing_mail.yml:/usr/src/app/config/outgoing_mail.yml
-      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/redis.yml:/usr/src/app/config/redis.yml
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/security.yml:/usr/src/app/config/security.yml
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/startup.sh:/usr/src/app/config/startup.sh
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/testmail.sh:/usr/src/app/config/testmail.sh
