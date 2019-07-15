@@ -17,6 +17,17 @@ secrets:
 services:
   canvas-db:
     image: 192.87.106.18:56001/postgres:0.1
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '512m'
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 200s      
     volumes:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/data:/var/lib/postgresql/data
     secrets:
@@ -28,13 +39,16 @@ services:
       POSTGRES_USER:     canvas
       POSTGRES_DB_PASSWORD_FILE: /run/secrets/canvas_db_dba_password
 
-
   app: &app
     image: 192.87.106.18:56001/canvas:0.1
     command: bash -c "./config/wait-for-it.sh -t 40 canvas-db:5432 && /usr/src/entrypoint"
     hostname: $STACK_DOMAIN
     deploy:
       replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '3g'
       restart_policy:
         condition: on-failure
         delay: 30s
@@ -82,5 +96,16 @@ services:
   worker:
     <<: *app
     command: bundle exec script/delayed_job run
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: '2g'
+      restart_policy:
+        condition: on-failure
+        delay: 30s
+        max_attempts: 3
+        window: 200s      
     ports:
       - $STACK_PORT2:80
