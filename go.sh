@@ -55,7 +55,7 @@ docker stack rm $STACK_SERVICE
 
 # prepare
 # preparations are only needed for full new install
-#./prepare.sh
+./prepare.sh
 
 # go
 docker stack deploy --with-registry-auth -c docker-compose.yml $STACK_SERVICE
