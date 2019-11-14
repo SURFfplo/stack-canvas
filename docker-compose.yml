@@ -20,7 +20,7 @@ services:
     deploy:
       placement: 
         constraints: 
-          - node.label.dev == true 
+          - $STACK_CONSTRAINT 
       replicas: 1
       resources:
         limits:
@@ -48,8 +48,8 @@ services:
     hostname: $STACK_DOMAIN
     deploy:
       placement: 
-        constraints: 
-          - node.label.dev == true 
+        constraints:
+          - $STACK_CONSTRAINT 
       replicas: 1
       resources:
         limits:
@@ -103,6 +103,9 @@ services:
     <<: *app
     command: bundle exec script/delayed_job run
     deploy:
+      placement: 
+        constraints:
+          - $STACK_CONSTRAINT 
       replicas: 1
       resources:
         limits:
