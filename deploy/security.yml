@@ -1,8 +1,8 @@
 production:
-  encryption_key: facdd3a131ddd8988b14f6e4e01039c93cfa0160
+  encryption_key: <%= ENV['KEYSECRET'] %>
 
 development:
-  encryption_key: facdd3a131ddd8988b14f6e4e01039c93cfa0160
+  encryption_key: <%= ENV['KEYSECRET'] %>
 
 test:
-  encryption_key: facdd3a131ddd8988b14f6e4e01039c93cfa0160
+  encryption_key: <%= ENV['KEYSECRET'] %>
