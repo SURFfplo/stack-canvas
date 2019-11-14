@@ -41,8 +41,9 @@ cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 40 | head -n 1 | docker secret c
 
 
 #create two run once services for initialisation purposes
-docker stack deploy --with-registry-auth --compose-file docker-compose.init.yml $STACK_SERVICE
-sleep 200
+#disabled so database does not gets rebuilt
+#docker stack deploy --with-registry-auth --compose-file docker-compose.init.yml $STACK_SERVICE
+#sleep 200
 docker stack deploy --with-registry-auth --compose-file docker-compose.init2.yml $STACK_SERVICE
 sleep 200
 #remove passowrd from system after initial setup
