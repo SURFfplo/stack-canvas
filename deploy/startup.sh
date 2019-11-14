@@ -18,6 +18,9 @@ fi
 
 secret=$(grep -A1 'production:' ./config/security.yml | tail -n1); secret=${secret//*encryption_key: /}; echo "$secret"
 
+
+sed -i "s/12345/$api_key/g" ./config/security.yml
+
 #psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "delete from developer_keys;"
 #psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "delete from access_tokens;"
 #psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "delete from developer_key_account_bindings;"
