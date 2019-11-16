@@ -9,7 +9,7 @@ sleep 10
 
 # clean mounts
 sudo rm -rf /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf
-#sudo rm -rf /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/data
+sudo rm -rf /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/data
 sudo rm -rf /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/redis
 sudo rm -rf /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/brandable_css
 sudo rm -rf /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/tmp
@@ -17,7 +17,7 @@ sudo rm -rf /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/tmp
 
 # create nfs mount
 mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf
-#mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/data
+mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/data
 mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/redis
 mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/brandable_css
 mkdir -p /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/tmp
@@ -42,8 +42,8 @@ cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 40 | head -n 1 | docker secret c
 
 #create two run once services for initialisation purposes
 #disabled so database does not gets rebuilt
-#docker stack deploy --with-registry-auth --compose-file docker-compose.init.yml $STACK_SERVICE
-#sleep 200
+docker stack deploy --with-registry-auth --compose-file docker-compose.init.yml $STACK_SERVICE
+sleep 200
 docker stack deploy --with-registry-auth --compose-file docker-compose.init2.yml $STACK_SERVICE
 sleep 200
 #remove passowrd from system after initial setup
