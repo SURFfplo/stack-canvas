@@ -16,6 +16,10 @@ secrets:
 services:
   canvas-db:
     image: 192.87.106.18:56001/postgres:0.1
+    deploy:
+      placement: 
+        constraints: 
+          - $STACK_CONSTRAINT
     volumes:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/data:/var/lib/postgresql/data
     secrets:
