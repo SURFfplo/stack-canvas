@@ -18,6 +18,9 @@ services:
   canvas-db:
     image: 192.87.106.18:56001/postgres:0.1
     deploy:
+      placement: 
+        constraints: 
+          - $STACK_CONSTRAINT
       replicas: 1
       resources:
         limits:
