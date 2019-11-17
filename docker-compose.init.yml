@@ -33,7 +33,7 @@ services:
 
   app: 
     image: 192.87.106.18:56001/canvas:0.1
-    command: bash -c "./config/wait-for-it.sh -t 40 canvas-db:5432 && bundle exec rake db:create db:initial_setup"
+    command: bash -c "./config/wait-for-it.sh -t 80 canvas-db:5432 && bundle exec rake db:create db:initial_setup"
     deploy:
       replicas: 1
       restart_policy:
