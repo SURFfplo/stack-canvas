@@ -15,11 +15,11 @@ else
         echo $key >&2
 fi
 
+sed "s/12345/$(cat /var/run/secrets/canvas_secret_api)/g" ./config/security.yml > ./config/sec_test.yml 
+cp ./config/sec_test.yml ./config/security.yml 
+rm ./config/sec_test.yml
 
 secret=$(grep -A1 'production:' ./config/security.yml | tail -n1); secret=${secret//*encryption_key: /}; echo "$secret"
-
-
-sed -i "s/12345/$api_key/g" ./config/security.yml
 
 #psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "delete from developer_keys;"
 #psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "delete from access_tokens;"
