@@ -31,7 +31,7 @@ export STACK_PORT2=$(($PORT + 1))
 export STACK_PASSWORD=$PASSWORD
 
 if [ $NETWORK == "dev-net" ]; then
-        export STACK_CONSTRAINT='node.labels.node2 == true'
+        export STACK_CONSTRAINT='node.labels.node1 == true'
         export STACK_DOMAIN=lms.dev.dlo.surf.nl
         export STACK_NETWORK_URL_IDP=https://idp.dev.dlo.surf.nl
         export STACK_NETWORK_IDP_FINGERPRINT=D9:BD:30:11:E7:1D:12:FA:92:E9:3F:95:D6:C4:24:B5:CD:D3:6F:AF
