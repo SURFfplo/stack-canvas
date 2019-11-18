@@ -5,13 +5,7 @@
 #curl http://www.jetmore.org/john/code/swaks/files/swaks-20181104.0.tar.gz --output ./swaks-20181104.0.tar.gz
 
 # get api token
-if [[ -v CANVAS_SECRET_API_FILE ]]; then
-        api_key=$(cat ${CANVAS_SECRET_API_FILE})
-#        echo $api_key >&2
-else 
-	api_key='123'
-#        echo $api_key >&2
-fi
+api_key=$(grep -A1 'production:' ./config/security.yml | tail -n1); secret=${secret//*encryption_key: /}; echo "$secret"
 
 #URL="https://"${CANVAS_DOMAIN}"/api/v1/accounts/1/authentication_providers"
 URL="http://localhost/api/v1/accounts/1/authentication_providers"
