@@ -10,7 +10,9 @@ networks:
 
 
 secrets:
-  canvas_db_dba_password:
+  DEVcanvas_db_dba_password:
+    external: true
+  TESTcanvas_db_dba_password:
     external: true
 
 services:
@@ -23,13 +25,13 @@ services:
     volumes:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/data:/var/lib/postgresql/data
     secrets:
-      - canvas_db_dba_password
+      - "${STACK_SERIVCE}_db_dba_password"
     networks:
       - $STACK_NETWORK
     environment:
       POSTGRES_DB:       canvas
       POSTGRES_USER:     canvas
-      POSTGRES_DB_PASSWORD_FILE: /run/secrets/canvas_db_dba_password
+      POSTGRES_DB_PASSWORD_FILE: "/run/secrets/${STACK_SERIVCE}_db_dba_password"
 
   app: 
     image: 192.87.106.18:56001/canvas:0.1
@@ -50,7 +52,7 @@ services:
       - DB_HOST=canvas-db
       - DB_PORT=5432
       - DB_USERNAME=canvas
-      - DB_PASSWORD_FILE= /run/secrets/canvas_db_dba_password
+      - DB_PASSWORD_FILE= "/run/secrets/${STACK_SERIVCE}_db_dba_password"
       - DB_NAME=canvas
       - RAILS_ENV=production
       - MAIL_SERVER=outgoing.mf.surf.nl
@@ -73,7 +75,7 @@ services:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/testmail.sh:/usr/src/app/config/testmail.sh
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/wait-for-it.sh:/usr/src/app/config/wait-for-it.sh
     secrets:
-      - canvas_db_dba_password
+      - "${STACK_SERIVCE}_db_dba_password"
     networks:
       - $STACK_NETWORK
     ports:
