@@ -15,7 +15,8 @@ else
         echo $key >&2
 fi
 
-sed "s/12345/$(cat /var/run/secrets/canvas_secret_api)/g" ./config/security.yml > ./config/sec_test.yml 
+api_key=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 40 | head -n 1)
+sed "s/12345/$api_key/g" ./config/security.yml > ./config/sec_test.yml 
 cp ./config/sec_test.yml ./config/security.yml 
 rm ./config/sec_test.yml
 
