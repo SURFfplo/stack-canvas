@@ -15,8 +15,8 @@ else
         echo $key >&2
 fi
 
-api_key=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 40 | head -n 1)
-sed "s/12345/$api_key/g" ./config/security.yml > ./config/sec_test.yml 
+secret=$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 40 | head -n 1)
+sed "s/12345/$secret/g" ./config/security.yml > ./config/sec_test.yml 
 cp ./config/sec_test.yml ./config/security.yml 
 rm ./config/sec_test.yml
 
@@ -27,7 +27,7 @@ secret=$(grep -A1 'production:' ./config/security.yml | tail -n1); secret=${secr
 #psql -U $DB_USERNAME -d $DB_NAME -h $DB_HOST -c "delete from developer_key_account_bindings;"
 
 
-#api_key=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
+api_key=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 developer_api_key=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 
 #api_key='$(< "${!CANVAS_SECRET_FILE}")'
