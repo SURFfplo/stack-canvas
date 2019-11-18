@@ -36,8 +36,8 @@ docker config rm $(docker config ls -f name=canvas -q)
 # e.g. date |md5sum|awk '{print $1}' | docker secret create my_secret -
 # or cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1 | docker secret create canvas_db_dba_password -
 # or visible printf "pasword"  | docker secret create canvas_db_dba_password -
-date |md5sum|awk '{print $1}' | docker secret create canvas_db_dba_password -
-cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 40 | head -n 1 | docker secret create canvas_secret_api -
+date |md5sum|awk '{print $1}' | docker secret create "${STACK_SERVICE}_db_dba_password" -
+cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 40 | head -n 1 | docker secret create "${STACK_SERVICE}_secret_api" -
 
 
 #create two run once services for initialisation purposes
