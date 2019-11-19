@@ -29,6 +29,9 @@ export STACK_NETWORK=$NETWORK
 export STACK_PORT=$PORT
 export STACK_PORT2=$(($PORT + 1))
 export STACK_PASSWORD=$PASSWORD
+export STACK_DB_DBA_PASSWORD="${SERVICE}_db_dba_password"
+export STACK_SECRET_API="${SERVICE}_secret_api"
+
 
 if [ $NETWORK == "dev-net" ]; then
         export STACK_CONSTRAINT='node.labels.node01 == true'
