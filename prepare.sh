@@ -57,7 +57,7 @@ cp ./deploy/* /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf
 # or cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1 | docker secret create canvas_db_dba_password -
 # or visible printf "pasword"  | docker secret create canvas_db_dba_password -
 date |md5sum|awk '{print $1}' | docker secret create $STACK_DB_DBA_PASSWORD -
-#cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 40 | head -n 1 | docker secret create $STACK_SECRET_API -
+cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 40 | head -n 1 | docker secret create $STACK_SECRET_API -
 
 
 #create two run once services for initialisation purposes
