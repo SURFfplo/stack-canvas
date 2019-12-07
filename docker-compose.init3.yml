@@ -11,11 +11,15 @@ networks:
 secrets:
   DEVcanvas_db_dba_password:
     external: true
-  DEVcanvas_secret_api:
+  DEVcanvas_secret:
+    external: true
+  DEVcanvas_api_key:
     external: true
   TESTcanvas_db_dba_password:
     external: true
-  TESTcanvas_secret_api:
+  TESTcanvas_secret:
+    external: true
+  TESTcanvas_api_key:
     external: true
 
 services:
@@ -38,13 +42,13 @@ services:
     volumes:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/data:/var/lib/postgresql/data
     secrets:
-      - ${STACK_SERVICE}_db_dba_password
+      - $STACK_DB_DBA_PASSWORD
     networks:
       - $STACK_NETWORK
     environment:
       POSTGRES_DB:       canvas
       POSTGRES_USER:     canvas
-      POSTGRES_DB_PASSWORD_FILE: /run/secrets/${STACK_SERVICE}_db_dba_password
+      POSTGRES_DB_PASSWORD_FILE: /run/secrets/$STACK_DB_DBA_PASSWORD
 
   app: &app
     image: 192.87.106.18:56001/canvas:0.1
@@ -65,12 +69,14 @@ services:
       - IDP_URL=$STACK_NETWORK_URL_IDP
       - IDP_FINGERPRINT=$STACK_NETWORK_IDP_FINGERPRINT
       - CANVAS_DOMAIN=$STACK_DOMAIN
-      - CANVAS_SECRET_API_FILE=/run/secrets/${STACK_SERVICE}_secret_api
+      - CANVAS_SECRET_FILE=/run/secrets/$STACK_SECRET
+      - CANVAS_API_KEY_FILE=/run/secrets/$STACK_API_KEY
+      - CANVAS_LMS_ADMIN_PASSWORD=$STACK_PASSWORD
       - DB_DRIVER=postgresql
       - DB_HOST=canvas-db
       - DB_PORT=5432
       - DB_USERNAME=canvas
-      - DB_PASSWORD_FILE=/run/secrets/${STACK_SERVICE}_db_dba_password
+      - DB_PASSWORD_FILE=/run/secrets/$STACK_DB_DBA_PASSWORD
       - DB_NAME=canvas
       - RAILS_ENV=production
       - MAIL_SERVER=outgoing.mf.surf.net
@@ -93,26 +99,11 @@ services:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/testmail.sh:/usr/src/app/config/testmail.sh
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/wait-for-it.sh:/usr/src/app/config/wait-for-it.sh
     secrets:
-      - ${STACK_SERVICE}_db_dba_password
-      - ${STACK_SERVICE}_secret_api
+      - $STACK_SECRET
+      - $STACK_API_KEY
+      - $STACK_DB_DBA_PASSWORD
     networks:
       - $STACK_NETWORK
     ports:
       - $STACK_PORT:80
 
-  worker:
-    <<: *app
-    command: bundle exec script/delayed_job run
-    deploy:
-      replicas: 1
-      resources:
-        limits:
-          cpus: '2.0'
-          memory: '2g'
-      restart_policy:
-        condition: on-failure
-        delay: 30s
-        max_attempts: 3
-        window: 200s      
-    ports:
-      - $STACK_PORT2:80

@@ -4,6 +4,7 @@ NETWORK=dev-net
 SERVICE=DEVcanvas
 VERSION=0.1
 PORT=57111
+PASSWORD=canvasPASS
 
 # input with four arguments: go.sh SERVICE VERSION NETWORK PORT
 if [ "$1" != "" ]; then
@@ -29,6 +30,10 @@ export STACK_NETWORK=$NETWORK
 export STACK_PORT=$PORT
 export STACK_PORT2=$(($PORT + 1))
 export STACK_PASSWORD=$PASSWORD
+export STACK_DB_DBA_PASSWORD="${SERVICE}_db_dba_password"
+export STACK_SECRET="${SERVICE}_secret"
+export STACK_API_KEY="${SERVICE}_api_key"
+
 
 if [ $NETWORK == "dev-net" ]; then
         export STACK_CONSTRAINT='node.labels.node01 == true'

@@ -11,11 +11,15 @@ networks:
 secrets:
   DEVcanvas_db_dba_password:
     external: true
-  DEVcanvas_secret_api:
+  DEVcanvas_secret:
+    external: true
+  DEVcanvas_api_key:
     external: true
   TESTcanvas_db_dba_password:
     external: true
   TESTcanvas_secret_api:
+    external: true
+  TESTcanvas_api_key:
     external: true
 
 services:
@@ -38,15 +42,27 @@ services:
     volumes:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/data:/var/lib/postgresql/data
     secrets:
-      - ${STACK_SERVICE}_db_dba_password
+      - $STACK_DB_DBA_PASSWORD
     networks:
       - $STACK_NETWORK
     environment:
       POSTGRES_DB:       canvas
       POSTGRES_USER:     canvas
-      POSTGRES_DB_PASSWORD_FILE: /run/secrets/${STACK_SERVICE}_db_dba_password
+      POSTGRES_DB_PASSWORD_FILE: /run/secrets/$STACK_DB_DBA_PASSWORD
 
-  app: &app
+
+  mail:
+    image: mailhog/mailhog:v1.0.0
+    deploy:
+      placement:
+        constraints:
+          - $STACK_CONSTRAINT
+    networks:
+      - $STACK_NETWORK
+    ports:
+      - 8901:8025
+
+  app: 
     image: 192.87.106.18:56001/canvas:0.1
     command: bash -c "./config/wait-for-it.sh -t 40 canvas-db:5432 && /usr/src/entrypoint"
     hostname: $STACK_DOMAIN
@@ -68,18 +84,19 @@ services:
       - IDP_URL=$STACK_NETWORK_URL_IDP
       - IDP_FINGERPRINT=$STACK_NETWORK_IDP_FINGERPRINT
       - CANVAS_DOMAIN=$STACK_DOMAIN
-      - CANVAS_SECRET_API_FILE=/run/secrets/${STACK_SERVICE}_secret_api
+      - CANVAS_SECRET_FILE=/run/secrets/$STACK_SECRET
+      - CANVAS_API_KEY_FILE=/run/secrets/$STACK_API_KEY
       - DB_DRIVER=postgresql
       - DB_HOST=canvas-db
       - DB_PORT=5432
       - DB_USERNAME=canvas
-      - DB_PASSWORD_FILE=/run/secrets/${STACK_SERVICE}_db_dba_password
+      - DB_PASSWORD_FILE=/run/secrets/$STACK_DB_DBA_PASSWORD
       - DB_NAME=canvas
       - RAILS_ENV=production
       - MAIL_SERVER=outgoing.mf.surf.net
       - MAIL_PORT=25
-      - MAIL_DOMAIN=surf.nl
-      - MAIL_DEFAULT_SENDER_ADDRESS=no-reply@surf.nl
+      - MAIL_DOMAIN=surfnet.nl
+      - MAIL_DEFAULT_SENDER_ADDRESS=ronald.ham@surfnet.nl
       - MAIL_DEFAULT_SENDER_NAME=Canvas Admin
     volumes:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/brandable_css:/usr/src/app/public/dist/brandable_css
@@ -96,20 +113,21 @@ services:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/testmail.sh:/usr/src/app/config/testmail.sh
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/wait-for-it.sh:/usr/src/app/config/wait-for-it.sh
     secrets:
-      - ${STACK_SERVICE}_db_dba_password
-      - ${STACK_SERVICE}_secret_api
+      - $STACK_DB_DBA_PASSWORD
+      - $STACK_SECRET
+      - $STACK_API_KEY
     networks:
       - $STACK_NETWORK
     ports:
       - $STACK_PORT:80
 
   worker:
-    <<: *app
+    image: 192.87.106.18:56001/canvas:0.1
     command: bundle exec script/delayed_job run
     deploy:
-      placement: 
+      placement:
         constraints:
-          - $STACK_CONSTRAINT 
+          - $STACK_CONSTRAINT
       replicas: 1
       resources:
         limits:
@@ -119,6 +137,51 @@ services:
         condition: on-failure
         delay: 30s
         max_attempts: 3
-        window: 200s      
+        window: 200s
+    environment:
+      - IDP_URL=$STACK_NETWORK_URL_IDP
+      - IDP_FINGERPRINT=$STACK_NETWORK_IDP_FINGERPRINT
+      - CANVAS_DOMAIN=$STACK_DOMAIN
+      - CANVAS_SECRET_FILE=/run/secrets/$STACK_SECRET
+      - CANVAS_API_KEY_FILE=/run/secrets/$STACK_API_KEY
+      - DB_DRIVER=postgresql
+      - DB_HOST=canvas-db
+      - DB_PORT=5432
+      - DB_USERNAME=canvas
+      - DB_PASSWORD_FILE=/run/secrets/$STACK_DB_DBA_PASSWORD
+      - DB_NAME=canvas
+      - RAILS_ENV=production
+#      - MAIL_SERVER=outgoing.mf.surf.net
+#      - MAIL_PORT=25
+#      - MAIL_DOMAIN=surf.nl
+#      - MAIL_DEFAULT_SENDER_ADDRESS=no-reply@surf.nl
+#      - MAIL_DEFAULT_SENDER_NAME=Canvas Admin
+      - MAIL_SERVER=mail
+      - MAIL_PORT=1025
+      - MAIL_USERNAME=canvas
+      - MAIL_PASSWORD=canvas
+      - MAIL_DOMAIN=example.com
+      - MAIL_DEFAULT_SENDER_ADDRESS=canvas@example.com
+      - MAIL_DEFAULT_SENDER_NAME=Canvas Admin
+    volumes:
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/brandable_css:/usr/src/app/public/dist/brandable_css
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/tmp:/usr/src/app/tmp
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/cache.yml:/usr/src/app/config/cache.yml
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/create_login.sh:/usr/src/app/config/create_login.sh
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/database.yml:/usr/src/app/config/database.yml
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/delayed_jobs.yml:/usr/src/app/config/delayed_jobs.yml
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/development-local.rb:/usr/src/app/config/development-local.rb
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/domain.yml:/usr/src/app/config/domain.yml
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/outgoing_mail.yml:/usr/src/app/config/outgoing_mail.yml
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/security.yml:/usr/src/app/config/security.yml
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/startup.sh:/usr/src/app/config/startup.sh
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/testmail.sh:/usr/src/app/config/testmail.sh
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/wait-for-it.sh:/usr/src/app/config/wait-for-it.sh
+    secrets:
+      - $STACK_SECRET
+      - $STACK_API_KEY
+      - $STACK_DB_DBA_PASSWORD
+    networks:
+      - $STACK_NETWORK
     ports:
       - $STACK_PORT2:80

@@ -1,0 +1,15 @@
+default: &default
+  address: <%= ENV['MAIL_SERVER'] %>
+  port: <%= ENV['MAIL_PORT'] %>
+  domain: <%= ENV['MAIL_DOMAIN'] %>
+  outgoing_address: <%= ENV['MAIL_DEFAULT_SENDER_ADDRESS'] %>
+  default_name: <%= ENV['MAIL_DEFAULT_SENDER_NAME'] %>
+
+development:
+  <<: *default
+
+production:
+  <<: *default
+
+test:
+  <<: *default
