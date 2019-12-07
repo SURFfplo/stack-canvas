@@ -4,7 +4,7 @@ NETWORK=dev-net
 SERVICE=DEVcanvas
 VERSION=0.1
 PORT=57111
-PASSWORD=canvasPASS
+PASSWORD=test
 
 # input with four arguments: go.sh SERVICE VERSION NETWORK PORT
 if [ "$1" != "" ]; then
