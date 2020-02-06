@@ -106,6 +106,7 @@ services:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/delayed_jobs.yml:/usr/src/app/config/delayed_jobs.yml
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/development-local.rb:/usr/src/app/config/development-local.rb
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/domain.yml:/usr/src/app/config/domain.yml
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/logging.yml:/usr/src/app/config/logging.yml
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/outgoing_mail.yml:/usr/src/app/config/outgoing_mail.yml
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/security.yml:/usr/src/app/config/security.yml
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/startup.sh:/usr/src/app/config/startup.sh
