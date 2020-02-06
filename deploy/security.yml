@@ -1,7 +1,7 @@
 production: &default
   # replace this with a random string of at least 20 characters
   encryption_key: tiovtgfxe47qpuzqcp4zjluj7l36fqkmi9hb73kh
-  #lti_iss: <%= ENV['CANVAS_DOMAIN'] %>
+  lti_iss: <%= ENV['CANVAS_DOMAIN'] %>
 
 development:
   <<: *default
