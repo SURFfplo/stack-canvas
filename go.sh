@@ -22,6 +22,9 @@ fi
 if [ "$5" != "" ]; then
         PASSWORD=$5
 fi
+if [ "$6" != "" ]; then
+        DEPLOYMENT=$6
+fi
 
 # reuse input
 export STACK_SERVICE=$SERVICE
@@ -60,7 +63,9 @@ docker stack rm $STACK_SERVICE
 
 # prepare
 # preparations are only needed for full new install
-./prepare.sh
+if [ $DEPLOYMENT == "initial" ]; then
+        ./initial.sh
+fi
 
 # go
 docker stack deploy --with-registry-auth -c docker-compose.yml $STACK_SERVICE
