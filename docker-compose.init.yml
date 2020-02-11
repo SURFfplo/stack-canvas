@@ -34,7 +34,7 @@ services:
       POSTGRES_DB_PASSWORD_FILE: /run/secrets/$STACK_DB_DBA_PASSWORD
 
   app: 
-    image: 192.87.106.18:56001/canvas:0.1
+    image: 192.87.106.18:56001/canvas:$STACK_VERSION
     command: bash -c "./config/wait-for-it.sh -t 80 canvas-db:5432 && bundle exec rake db:create db:initial_setup"
     deploy:
       replicas: 1
