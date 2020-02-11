@@ -123,7 +123,7 @@ services:
       - $STACK_PORT:80
 
   worker:
-    image: 192.87.106.18:56001/canvas:0.1
+    image: 192.87.106.18:56001/canvas:$STACK_VERSION
     command: bundle exec script/delayed_job run
     deploy:
       placement:
