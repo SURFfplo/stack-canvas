@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#first get canvas up and running
+/usr/src/entrypoint &
+#wait for service to come up
+sleep 40
+
 #CANVAS_LMS_ADMIN_EMAIL=ronald.ham@surfnet.nl
 #CANVAS_DOMAIN=lms.dev.dlo.surf.nl
 #DB_HOST=canvas-db
