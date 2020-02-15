@@ -98,6 +98,7 @@ services:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/startup.sh:/usr/src/app/config/startup.sh
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/testmail.sh:/usr/src/app/config/testmail.sh
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/wait-for-it.sh:/usr/src/app/config/wait-for-it.sh
+      - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf/create_crypted_token.rb:/usr/src/app/config/create_crypted_token.rb
     secrets:
       - $STACK_SECRET
       - $STACK_API_KEY
