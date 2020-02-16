@@ -78,7 +78,7 @@ services:
       - CANVAS_DOMAIN=$STACK_DOMAIN
       - CANVAS_SECRET_FILE=/run/secrets/$STACK_SECRET
       - CANVAS_API_KEY_FILE=/run/secrets/$STACK_API_KEY
-      - CANVAS_DEV_KEY=/run/secrets/$STACK_DEV_KEY
+      - CANVAS_DEV_KEY_FILE=/run/secrets/$STACK_DEV_KEY
       - CANVAS_LMS_ADMIN_PASSWORD=$STACK_PASSWORD
       - DB_DRIVER=postgresql
       - DB_HOST=canvas-db
