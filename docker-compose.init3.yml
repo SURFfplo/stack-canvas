@@ -15,11 +15,15 @@ secrets:
     external: true
   DEVcanvas_api_key:
     external: true
+  DEVcanvas_dev_key:
+    external: true
   TESTcanvas_db_dba_password:
     external: true
   TESTcanvas_secret:
     external: true
   TESTcanvas_api_key:
+    external: true
+  TESTcanvas_dev_key:
     external: true
 
 services:
@@ -74,6 +78,7 @@ services:
       - CANVAS_DOMAIN=$STACK_DOMAIN
       - CANVAS_SECRET_FILE=/run/secrets/$STACK_SECRET
       - CANVAS_API_KEY_FILE=/run/secrets/$STACK_API_KEY
+      - CANVAS_DEV_KEY=/run/secrets/$STACK_DEV_KEY
       - CANVAS_LMS_ADMIN_PASSWORD=$STACK_PASSWORD
       - DB_DRIVER=postgresql
       - DB_HOST=canvas-db
@@ -106,6 +111,7 @@ services:
       - $STACK_SECRET
       - $STACK_API_KEY
       - $STACK_DB_DBA_PASSWORD
+      - $STACK_DEV_KEY
     networks:
       - $STACK_NETWORK
     ports:
