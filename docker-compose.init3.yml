@@ -75,6 +75,7 @@ services:
     environment:
       - IDP_URL=$STACK_NETWORK_URL_IDP
       - IDP_FINGERPRINT=$STACK_NETWORK_IDP_FINGERPRINT
+      - CANVAS_LMS_ADMIN_EMAIL=$STACK_ADMIN_EMAIL      
       - CANVAS_DOMAIN=$STACK_DOMAIN
       - CANVAS_SECRET_FILE=/run/secrets/$STACK_SECRET
       - CANVAS_API_KEY_FILE=/run/secrets/$STACK_API_KEY
@@ -87,11 +88,6 @@ services:
       - DB_PASSWORD_FILE=/run/secrets/$STACK_DB_DBA_PASSWORD
       - DB_NAME=canvas
       - RAILS_ENV=production
-      - MAIL_SERVER=outgoing.mf.surf.net
-      - MAIL_PORT=25
-      - MAIL_DOMAIN=surf.nl
-      - MAIL_DEFAULT_SENDER_ADDRESS=no-reply@surf.nl
-      - MAIL_DEFAULT_SENDER_NAME=Canvas Admin
     volumes:
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/brandable_css:/usr/src/app/public/dist/brandable_css
       - /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/tmp:/usr/src/app/tmp
