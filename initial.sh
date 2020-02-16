@@ -49,8 +49,8 @@ echo "$api_key" | docker secret create $STACK_API_KEY -
 
 
 # Add config files and exexcutables to setup canvas
-cp ./deploy/* /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf
-
+sudo cp ./deploy/* /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf
+sudo chown -R 9999:9999 /mnt/nfs/nfsdlo/$STACK_NETWORK/$STACK_SERVICE/$STACK_VERSION/conf
 
 # create secrets for database
 # e.g. date |md5sum|awk '{print $1}' | docker secret create my_secret -
