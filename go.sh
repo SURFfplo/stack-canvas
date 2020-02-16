@@ -38,7 +38,8 @@ export STACK_PASSWORD=$PASSWORD
 export STACK_DB_DBA_PASSWORD="${SERVICE}_db_dba_password"
 export STACK_SECRET="${SERVICE}_secret"
 export STACK_API_KEY="${SERVICE}_api_key"
-
+export STACK_DEV_KEY="${SERVICE}_dev_key"
+export STACK_ADMIN_EMAIL="ronald.ham@surfnet.nl"
 
 if [ $NETWORK == "dev-net" ]; then
         export STACK_CONSTRAINT='node.labels.node01 == true'
