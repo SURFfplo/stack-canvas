@@ -43,9 +43,13 @@ cp ./deploy/security.yml ./deploy/security.yml_org && sed "s/12345/$secret/g" ./
 cp ./deploy/sec_test.yml ./deploy/security.yml
 echo "$secret" | docker secret create $STACK_SECRET -
 
-# create developer API key
+# create API key
 api_key=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
 echo "$api_key" | docker secret create $STACK_API_KEY -
+
+# create DEV key
+dev_key=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)
+echo "$dev_key" | docker secret create $STACK_DEV_KEY -
 
 
 # Add config files and exexcutables to setup canvas
