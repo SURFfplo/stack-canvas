@@ -4,7 +4,7 @@ NETWORK=dev-net
 SERVICE=DEVcanvas
 VERSION=0.3
 PORT=57111
-DEPLOYMENT=initial
+#DEPLOYMENT=initial
 PASSWORD=test
 
 
